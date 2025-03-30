@@ -71,39 +71,64 @@
             font-size: 0.9em;
             color: #888;
         }
+        .login-container {
+            text-align: center;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Encode and Decode Personal Code</h2>
-
-    <div class="container">
-        <label for="inputText">Enter text to encode:</label>
-        <input type="text" id="inputText" placeholder="Enter text to encode">
-        <button onclick="encodeText()">Encode</button>
+    <div id="loginSection" class="login-container">
+        <h2>Enter Password to Access the Site</h2>
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="checkPassword()">Submit</button>
+        <p id="errorMessage" style="color: red; display: none;">Incorrect password. Please try again.</p>
     </div>
 
-    <div class="container">
-        <label for="encodedText">Encoded Personal Code:</label>
-        <input type="text" id="encodedText" placeholder="Encoded text will appear here" readonly>
-    </div>
+    <div id="contentSection" style="display: none;">
+        <h2>Encode and Decode Personal Code</h2>
 
-    <div class="container">
-        <label for="decodedText">Enter personal code to decode:</label>
-        <input type="text" id="decodedText" placeholder="Enter encoded text to decode">
-        <button onclick="decodeText()">Decode</button>
-    </div>
+        <div class="container">
+            <label for="inputText">Enter text to encode:</label>
+            <input type="text" oninput="encodeText()" id="inputText" placeholder="Enter text to encode">
+            <button onclick="encodeText()">Encode</button>
+        </div>
 
-    <div class="result">
-        <h3>Decoded Text:</h3>
-        <p id="decodedResult">Your decoded text will appear here...</p>
-    </div>
+        <div class="container">
+            <label for="encodedText">Encoded Personal Code:</label>
+            <input type="text" id="encodedText" placeholder="Encoded text will appear here" readonly>
+        </div>
 
-    <div class="footer">
-        <p>&copy; 2025 Encode/Decode App. All rights reserved.</p>
+        <div class="container">
+            <label for="decodedText">Enter personal code to decode:</label>
+            <input type="text" oninput="decodeText()" id="decodedText" placeholder="Enter encoded text to decode">
+            <button onclick="decodeText()">Decode</button>
+        </div>
+
+        <div class="result">
+            <h3>Decoded Text:</h3>
+            <p id="decodedResult">Your decoded text will appear here...</p>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Encode/Decode App. All rights reserved.</p>
+        </div>
     </div>
 
     <script>
+        function checkPassword() {
+            const enteredPassword = document.getElementById("password").value;
+            const correctPassword = "57063263";
+
+            if (enteredPassword === correctPassword) {
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("contentSection").style.display = "block";
+            } else {
+                document.getElementById("errorMessage").style.display = "block";
+            }
+        }
+
         function encodeText() {
             var inputText = document.getElementById("inputText").value;
             if (inputText) {

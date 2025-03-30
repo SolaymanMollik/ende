@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encode and Decode</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            padding: 40px;
+            margin: 0;
+            text-align: center;
+        }
+        h2 {
+            font-size: 2.5em;
+            color: #5f6368;
+            margin-bottom: 40px;
+        }
+        .container {
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #4caf50;
+        }
+        button {
+            background-color: #ff6f61;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e44c3e;
+        }
+        .result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .result h3 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .result p {
+            font-size: 1.2em;
+            color: #5f6368;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Encode and Decode Personal Code</h2>
+
+    <div class="container">
+        <label for="inputText">Enter text to encode:</label>
+        <input type="text" id="inputText" placeholder="Enter text to encode">
+        <button onclick="encodeText()">Encode</button>
+    </div>
+
+    <div class="container">
+        <label for="encodedText">Encoded Personal Code:</label>
+        <input type="text" id="encodedText" placeholder="Encoded text will appear here" readonly>
+    </div>
+
+    <div class="container">
+        <label for="decodedText">Enter personal code to decode:</label>
+        <input type="text" id="decodedText" placeholder="Enter encoded text to decode">
+        <button onclick="decodeText()">Decode</button>
+    </div>
+
+    <div class="result">
+        <h3>Decoded Text:</h3>
+        <p id="decodedResult">Your decoded text will appear here...</p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Encode/Decode App. All rights reserved.</p>
+    </div>
+
+    <script>
+        function encodeText() {
+            var inputText = document.getElementById("inputText").value;
+            if (inputText) {
+                var encoded = btoa(inputText); // Base64 encoding
+                document.getElementById("encodedText").value = encoded;
+            } else {
+                alert("Please enter some text to encode.");
+            }
+        }
+
+        function decodeText() {
+            var encodedText = document.getElementById("decodedText").value;
+            if (encodedText) {
+                try {
+                    var decoded = atob(encodedText); // Base64 decoding
+                    document.getElementById("decodedResult").innerText = decoded;
+                } catch (e) {
+                    document.getElementById("decodedResult").innerText = "Invalid personal code.";
+                }
+            } else {
+                alert("Please enter some encoded text to decode.");
+            }
+        }
+    </script>
+
+</body>
+</html>

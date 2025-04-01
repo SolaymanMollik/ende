@@ -3,56 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encode and Decode</title>
+    <title>Secure Encode & Decode</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f8ff;
+            /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+            font-family: monospace;
+            background: linear-gradient(to right, #a8c0ff, #3f87a6); /* Peaceful Blue Gradient */
             color: #333;
             padding: 40px;
             margin: 0;
             text-align: center;
         }
+        input,button{
+            font-family: monospace;
+        }
         h2 {
             font-size: 2.5em;
-            color: #5f6368;
+            color: #fff;
             margin-bottom: 40px;
         }
         .container {
             margin-bottom: 30px;
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9); /* Light Transparent White */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
         }
-        input[type="text"] {
+        .container:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        input {
             width: 80%;
-            padding: 12px;
+            padding: 15px;
             margin: 10px 0;
             font-size: 1.1em;
             border: 2px solid #ddd;
             border-radius: 5px;
             outline: none;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #ffffff;
+            box-sizing: border-box;
         }
-        input[type="text"]:focus {
+        input:focus {
             border-color: #4caf50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
         }
         button {
-            background-color: #ff6f61;
+            background: linear-gradient(to right, #6a11cb, #2575fc); /* Blue Gradient */
             color: #fff;
             border: none;
             padding: 12px 20px;
             font-size: 1.2em;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s ease;
+            margin-top: 10px;
         }
         button:hover {
-            background-color: #e44c3e;
+            background: linear-gradient(to right, #3f87a6, #a8c0ff); /* Darker Blue Hover */
+            transform: scale(1.05);
         }
         .result {
-            background-color: #f9f9f9;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 15px;
             border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -66,62 +79,71 @@
             font-size: 1.2em;
             color: #5f6368;
         }
+        #loginSection {
+            background: linear-gradient(to right, #1d72b8, #085f87); /* Login Section Gradient */
+            color: white;
+            padding: 50px 20px;
+            border-radius: 10px;
+        }
+        #loginSection input {
+            background-color: #ffffff;
+        }
         .footer {
             margin-top: 40px;
             font-size: 0.9em;
-            color: #888;
+            color: #fff;
         }
-        .login-container {
-            text-align: center;
-            margin-top: 50px;
+        .footer p {
+            color: #ddd;
         }
+    
     </style>
 </head>
 <body>
 
-    <div id="loginSection" class="login-container">
-        <h2>Enter Password to Access the Site</h2>
+    <div id="loginSection">
+        <h2>Enter Password to Access</h2>
         <input type="password" id="password" placeholder="Enter password">
         <button onclick="checkPassword()">Submit</button>
         <p id="errorMessage" style="color: red; display: none;">Incorrect password. Please try again.</p>
     </div>
 
     <div id="contentSection" style="display: none;">
-        <h2>Encode and Decode Personal Code</h2>
+        <h2>Secure Encode and Decode</h2>
 
         <div class="container">
             <label for="inputText">Enter text to encode:</label>
-            <input type="text" oninput="encodeText()" id="inputText" placeholder="Enter text to encode">
+            <input type="text" id="inputText" placeholder="Enter text to encode">
             <button onclick="encodeText()">Encode</button>
         </div>
 
         <div class="container">
             <label for="encodedText">Encoded Personal Code:</label>
             <input type="text" id="encodedText" placeholder="Encoded text will appear here" readonly>
+            <button onclick="copyToClipboard('encodedText')">Copy to Clipboard</button>
         </div>
 
         <div class="container">
             <label for="decodedText">Enter personal code to decode:</label>
-            <input type="text" oninput="decodeText()" id="decodedText" placeholder="Enter encoded text to decode">
+            <input type="text" id="decodedText" placeholder="Enter encoded text to decode">
             <button onclick="decodeText()">Decode</button>
         </div>
 
         <div class="result">
             <h3>Decoded Text:</h3>
             <p id="decodedResult">Your decoded text will appear here...</p>
-        </div>
-
-        <div class="footer">
-            <p>&copy; 2025 Encode/Decode App. All rights reserved.</p>
+            <button onclick="copyToClipboard('decodedResult')">Copy to Clipboard</button>
         </div>
     </div>
 
     <script>
-        function checkPassword() {
-            const enteredPassword = document.getElementById("password").value;
-            const correctPassword = "57063263";
+      
+        const storedPassword = "57063263";
 
-            if (enteredPassword === correctPassword) {
+        async function checkPassword() {
+            const enteredPassword = document.getElementById("password").value;
+
+            if (enteredPassword === storedPassword) {
                 document.getElementById("loginSection").style.display = "none";
                 document.getElementById("contentSection").style.display = "block";
             } else {
@@ -129,28 +151,61 @@
             }
         }
 
+        document.getElementById("password").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
+
+        function shiftCharacters(str, shift) {
+            return str.split('').map(char => String.fromCharCode(char.charCodeAt(0) + shift)).join('');
+        }
+
         function encodeText() {
-            var inputText = document.getElementById("inputText").value;
-            if (inputText) {
-                var encoded = btoa(inputText); // Base64 encoding
-                document.getElementById("encodedText").value = encoded;
-            } else {
-                alert("Please enter some text to encode.");
+            let input = document.getElementById("inputText").value;
+            if (input) {
+                let base64Encoded = btoa(input); // Base64 Encode
+                let shiftedEncoded = shiftCharacters(base64Encoded, 1); // Shift Characters
+                document.getElementById("encodedText").value = shiftedEncoded;
             }
         }
 
         function decodeText() {
-            var encodedText = document.getElementById("decodedText").value;
+            let encodedText = document.getElementById("decodedText").value;
             if (encodedText) {
                 try {
-                    var decoded = atob(encodedText); // Base64 decoding
-                    document.getElementById("decodedResult").innerText = decoded;
+                    let shiftedDecoded = shiftCharacters(encodedText, -1); // Reverse Shift
+                    let base64Decoded = atob(shiftedDecoded); // Base64 Decode
+                    document.getElementById("decodedResult").innerText = base64Decoded;
                 } catch (e) {
                     document.getElementById("decodedResult").innerText = "Invalid personal code.";
                 }
-            } else {
-                alert("Please enter some encoded text to decode.");
             }
+        }
+
+        // ENTER কী প্রেস করলে ফাংশন ট্রিগার হবে
+        document.getElementById("inputText").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                encodeText();
+            }
+        });
+
+        document.getElementById("decodedText").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                decodeText();
+            }
+        });
+
+        // কপি টু ক্লিপবোর্ড ফাংশন
+        function copyToClipboard(elementId) {
+            let text = document.getElementById(elementId).value || document.getElementById(elementId).innerText;
+            let textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Copied to Clipboard');
         }
     </script>
 
